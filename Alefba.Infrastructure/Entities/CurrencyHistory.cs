@@ -17,12 +17,5 @@ namespace Alefba.Infrastructure.Entities
         public override string ToString() => $"{Symbol}: {Rate:N0} Rials [On {Date} - {Time}]";
 
     }
-
-    [BsonIgnoreExtraElements]
-    public class CurrencyHistoryLimited
-    {
-        public int Rate { get; set; }
-
-    }
 }
 

@@ -1,5 +1,4 @@
 ﻿using Alefba.Core.Abstracts;
-using Alefba.Core.Enums;
 using Alefba.Core.Models;
 using Alefba.Infrastructure.Entities;
 using MongoDB.Bson;
