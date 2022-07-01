@@ -6,18 +6,20 @@ namespace Alefba.Infrastructure.Services
 {
     public class ScraperService : IScraperService
     {
-        private const string WEB_PAGE_URL = @"https://mex.co.ir/";
-        private readonly HtmlWeb _htmlWeb;
+        private readonly HtmlDocument _htmlDocument;
+        private readonly IHtmlDownlaoderService _htmlDownlaoderService;
 
-        public ScraperService()
+        public ScraperService(IHtmlDownlaoderService htmlDownlaoderService)
         {
-            _htmlWeb = new();
+            _htmlDocument = new();
+            _htmlDownlaoderService = htmlDownlaoderService;
         }
 
         public async Task<string> ScrapCurrencyRateCell(CurrencyType currencyType, RateTradeType rateTradeType)
         {
-            var document = await _htmlWeb.LoadFromWebAsync(WEB_PAGE_URL);
-            var row = GetRowContainingCurrencyType(currencyType, document);
+            var htmlText = await _htmlDownlaoderService.LoadHtmlText();
+            _htmlDocument.LoadHtml(htmlText);
+            var row = GetRowContainingCurrencyType(currencyType, _htmlDocument);
             return row[(int)rateTradeType];
         }
 

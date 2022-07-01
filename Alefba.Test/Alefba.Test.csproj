@@ -16,4 +16,25 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PriceTracker\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Alefba.Core\Alefba.Core.csproj" />
+    <ProjectReference Include="..\Alefba.Infrastructure\Alefba.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Mock\MockHtmlDownloaderService.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Mock\page.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

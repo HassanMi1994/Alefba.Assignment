@@ -26,5 +26,3 @@ app.MapControllers();
 
 app.Run();
 
-BsonClassMap.RegisterClassMap<CurrencyRate>
-

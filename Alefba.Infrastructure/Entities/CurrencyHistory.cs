@@ -8,6 +8,7 @@ namespace Alefba.Infrastructure.Entities
         [BsonId]
         public Guid ID { get; set; }
 
+        [BsonDateTimeOptions(DateOnly = true)]
         public DateTime Date { get; set; }
         public TimeSpan Time { get; set; }
         public string Symbol { get; set; }

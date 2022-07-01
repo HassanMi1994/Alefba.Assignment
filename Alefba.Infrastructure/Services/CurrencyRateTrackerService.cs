@@ -28,7 +28,7 @@ namespace Alefba.Infrastructure.Services
         {
             return new CurrencyHistory
             {
-                Date = DateTime.Now,
+                Date = DateTime.Now.Date,
                 Time = DateTime.Now.TimeOfDay,
                 Rate = int.Parse(price.Replace(",", "")),
                 Symbol = CurrencyType.USD.ToString()
