@@ -22,8 +22,17 @@ namespace Alefba.Api.BackgroundTasks
 
         public async void GetPriceUpdateAsync(object? state)
         {
-            var model = await _currencyRateTrackerService.UpdateLastestDollarRateAsync();
-            _logger.LogInformation(model.ToString());
+            try
+            {
+                var model = await _currencyRateTrackerService.UpdateLastestDollarRateAsync();
+                _logger.LogInformation(model.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error! Description => {ex.Message})");
+                return;
+            }
+
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
