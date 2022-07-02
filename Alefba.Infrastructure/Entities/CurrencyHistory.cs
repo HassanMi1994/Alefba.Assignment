@@ -14,7 +14,11 @@ namespace Alefba.Infrastructure.Entities
         public string Symbol { get; set; }
         public int Rate { get; set; }
 
-        public override string ToString() => $"{Symbol}: {Rate:N0} Rials [On {Date} - {Time}]";
+        public override string ToString()
+        {
+            string invalidPriceWarning = Rate == 0 ? " - (this price (0) won't be saved in MongoDB because the price is not valid!" : "";
+            return $"{Symbol}: {Rate:N0} Rial On {Date.ToString("yyyy-MM-dd")}  At  {Time.ToString(@"hh\:mm\:ss")}" + invalidPriceWarning;
+        }
 
     }
 }

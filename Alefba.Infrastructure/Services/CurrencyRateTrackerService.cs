@@ -20,7 +20,8 @@ namespace Alefba.Infrastructure.Services
         {
             var price = await _tableScraperService.ScrapCurrencyRateCell(CurrencyType.USD, RateTradeType.Buy);
             var model = MakeCurrencyHistory(price);
-            await _priceTrackerRepository.InsertRecordAsync(model);
+            if (model.Rate > 0)
+                await _priceTrackerRepository.InsertRecordAsync(model);
             return model;
         }
 
