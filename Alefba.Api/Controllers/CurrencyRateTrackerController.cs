@@ -22,8 +22,7 @@ namespace Alefba.Api.Controllers
         {
             try
             {
-                double average = await _currencyRateTrackerService.GetAverageAsync(fromDate, toDate);
-                return average.ToString("0N");
+                return await _currencyRateTrackerService.GetAverageAsync(fromDate, toDate);
             }
             catch (Exception ex)
             {

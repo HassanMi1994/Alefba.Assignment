@@ -50,9 +50,11 @@ namespace Alefba.Infrastructure.Services
             };
         }
 
-        public async Task<double> GetAverageAsync(DateTime from, DateTime to)
+        public async Task<string> GetAverageAsync(DateTime from, DateTime to)
         {
-            return await _priceTrackerRepository.GetAverageAsync(from, to);
+            double doublePrice = await _priceTrackerRepository.GetAverageAsync(from, to);
+            int priceInRial = Convert.ToInt32(doublePrice);
+            return priceInRial.ToString("N0");
         }
     }
 }
