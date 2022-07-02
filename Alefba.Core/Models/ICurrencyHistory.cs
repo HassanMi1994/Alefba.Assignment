@@ -7,5 +7,7 @@
         public TimeSpan Time { get; set; }
         public string Symbol { get; set; }
         public int Rate { get; set; }
+
+        public bool IsPriceLargerThanZero => Rate > 0;
     }
 }

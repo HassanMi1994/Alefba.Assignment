@@ -2,6 +2,7 @@
 using Alefba.Core.Enums;
 using Alefba.Core.Models;
 using Alefba.Infrastructure.Entities;
+using DnsClient.Internal;
 
 namespace Alefba.Infrastructure.Services
 {
@@ -9,20 +10,33 @@ namespace Alefba.Infrastructure.Services
     {
         private readonly IScraperService _tableScraperService;
         private readonly IPriceTrackerRepository _priceTrackerRepository;
+        private readonly ILogger _logger;
 
-        public CurrencyRateTrackerService(IScraperService tableScraperService, IPriceTrackerRepository priceTrackerRepository)
+        public CurrencyRateTrackerService(IScraperService tableScraperService, IPriceTrackerRepository priceTrackerRepository, ILogger logger)
         {
             _tableScraperService = tableScraperService;
             _priceTrackerRepository = priceTrackerRepository;
+            _logger = logger;
         }
 
         public async Task<ICurrencyHistory> UpdateLastestDollarRateAsync()
         {
             var price = await _tableScraperService.ScrapCurrencyRateCell(CurrencyType.USD, RateTradeType.Buy);
             var model = MakeCurrencyHistory(price);
-            if (model.Rate > 0)
-                await _priceTrackerRepository.InsertRecordAsync(model);
+            await InsertIfPriceIsLargerThanZero(model);
             return model;
+        }
+
+        private async Task InsertIfPriceIsLargerThanZero(ICurrencyHistory model)
+        {
+            if (model.IsPriceLargerThanZero)
+            {
+                await _priceTrackerRepository.InsertRecordAsync(model);
+            }
+            else
+            {
+                _logger.LogInformation("this price (0) won't be saved in MongoDB because the price is not valid!");
+            }
         }
 
         private static ICurrencyHistory MakeCurrencyHistory(string price)
