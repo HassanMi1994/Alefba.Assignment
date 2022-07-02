@@ -5,12 +5,12 @@ namespace Alefba.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CurrencyRateTrackerController : ControllerBase
+    public class AverageRate : ControllerBase
     {
-        private readonly ILogger<CurrencyRateTrackerController> _logger;
+        private readonly ILogger<AverageRate> _logger;
         private readonly ICurrencyRateTrackerService _currencyRateTrackerService;
 
-        public CurrencyRateTrackerController(ILogger<CurrencyRateTrackerController> logger,
+        public AverageRate(ILogger<AverageRate> logger,
                ICurrencyRateTrackerService currencyRateTrackerService)
         {
             _logger = logger;
@@ -18,10 +18,20 @@ namespace Alefba.Api.Controllers
         }
 
         [HttpGet(Name = "GetAverage")]
-        public async Task<double> GetAverage([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
+        public async Task<string> GetAverage([FromQuery] DateTime fromDate, [FromQuery] DateTime toDate)
         {
-            double average = await _currencyRateTrackerService.GetAverageAsync(fromDate, toDate);
-            return average;
+            try
+            {
+                double average = await _currencyRateTrackerService.GetAverageAsync(fromDate, toDate);
+                return average.ToString("0N");
+            }
+            catch (Exception ex)
+            {
+                ControllerContext.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                _logger.LogError(ex.Message);
+                return "Please check your parameters (from date, and 'to date') and try again later\n " +
+                    "Also you can inspect error details in console window!";
+            }
         }
     }
 }
