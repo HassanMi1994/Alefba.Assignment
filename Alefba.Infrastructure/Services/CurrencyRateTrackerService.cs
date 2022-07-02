@@ -2,7 +2,7 @@
 using Alefba.Core.Enums;
 using Alefba.Core.Models;
 using Alefba.Infrastructure.Entities;
-using DnsClient.Internal;
+using Microsoft.Extensions.Logging;
 
 namespace Alefba.Infrastructure.Services
 {
@@ -10,9 +10,9 @@ namespace Alefba.Infrastructure.Services
     {
         private readonly IScraperService _tableScraperService;
         private readonly IPriceTrackerRepository _priceTrackerRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<CurrencyRateTrackerService> _logger;
 
-        public CurrencyRateTrackerService(IScraperService tableScraperService, IPriceTrackerRepository priceTrackerRepository, ILogger logger)
+        public CurrencyRateTrackerService(IScraperService tableScraperService, IPriceTrackerRepository priceTrackerRepository, ILogger<CurrencyRateTrackerService> logger)
         {
             _tableScraperService = tableScraperService;
             _priceTrackerRepository = priceTrackerRepository;
@@ -35,7 +35,7 @@ namespace Alefba.Infrastructure.Services
             }
             else
             {
-                _logger.LogInformation("this price (0) won't be saved in MongoDB because the price is not valid!");
+                _logger.LogWarning("this price (0) won't be saved in MongoDB because the price is not valid!");
             }
         }
 
