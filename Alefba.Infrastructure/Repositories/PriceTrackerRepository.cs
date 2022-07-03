@@ -37,11 +37,5 @@ namespace Alefba.Infrastructure.Repository
             var jsonCollection = await collection.FindAsync(x => x.Date >= from && x.Date <= to);
             return jsonCollection.ToList<ICurrencyHistory>();
         }
-
-        public async Task<double> GetAverageAsync(DateTime from, DateTime to)
-        {
-            var all = await GetAllCurrencyHistoryByDate(from, to);
-            return all.Average(x => x.Rate);
-        }
     }
 }

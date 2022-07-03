@@ -30,13 +30,10 @@ namespace Alefba.Infrastructure.Services
         private async Task InsertIfPriceIsLargerThanZero(ICurrencyHistory model)
         {
             if (model.IsPriceLargerThanZero)
-            {
                 await _priceTrackerRepository.InsertRecordAsync(model);
-            }
+
             else
-            {
                 _logger.LogWarning("this price (0) won't be saved in MongoDB because the price is not valid!");
-            }
         }
 
         private static ICurrencyHistory MakeCurrencyHistory(string price)
@@ -52,8 +49,9 @@ namespace Alefba.Infrastructure.Services
 
         public async Task<string> GetAverageAsync(DateTime from, DateTime to)
         {
-            double doublePrice = await _priceTrackerRepository.GetAverageAsync(from, to);
-            int priceInRial = Convert.ToInt32(doublePrice);
+            var history = await _priceTrackerRepository.GetAllCurrencyHistoryByDate(from, to);
+            double averageInDobule = history.Average(x => x.Rate);
+            int priceInRial = Convert.ToInt32(averageInDobule);
             return priceInRial.ToString("N0");
         }
     }
